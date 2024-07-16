@@ -3,77 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Search - Search Page</title>
+    <title>Business Search MVP</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
-            margin: 0 auto;
             background-color: white;
             padding: 30px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
         }
         h1 {
             color: #333;
-            text-align: center;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-top: 10px;
-        }
-        input, select {
-            margin-bottom: 15px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
+        .search-button {
+            display: inline-block;
             background-color: #007bff;
             color: white;
             padding: 10px 20px;
-            border: none;
+            text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Search Businesses</h1>
-        <form id="searchForm">
-            <label for="keyword">Keyword:</label>
-            <input type="text" id="keyword" name="keyword" required placeholder="e.g., dentist">
-
-            <label for="location">Location (Address or Coordinates):</label>
-            <input type="text" id="location" name="location" required placeholder="e.g., 123 Main St, City, State">
-
-            <label for="radius">Search Radius (miles):</label>
-            <input type="number" id="radius" name="radius" required min="1" max="100" value="10">
-
-            <button type="submit">Search</button>
-        </form>
+        <h1>Welcome to Business Search</h1>
+        <p>Find the businesses you're looking for in your area.</p>
+        <a href="search.html" class="search-button">Search Businesses Now</a>
     </div>
-
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Search functionality will be implemented in the next phase.');
-            // Here we'll add the search logic in the future
-        });
-    </script>
 </body>
 </html>
