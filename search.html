@@ -21,7 +21,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        h1 {
+        h1, h2 {
             color: #bb86fc;
             text-align: center;
         }
@@ -54,6 +54,15 @@
         button:hover {
             background-color: #018786;
         }
+        #results {
+            margin-top: 20px;
+        }
+        .result-item {
+            background-color: #2c2c2c;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -71,14 +80,44 @@
 
             <button type="submit">Search</button>
         </form>
+        <div id="results"></div>
     </div>
 
     <script>
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('Search functionality will be implemented in the next phase.');
-            // Here we'll add the search logic in the future
+            const keyword = document.getElementById('keyword').value;
+            const location = document.getElementById('location').value;
+            const radius = document.getElementById('radius').value;
+
+            try {
+                const response = await fetch('/.netlify/functions/search', {
+                    method: 'POST',
+                    body: JSON.stringify({ keyword, location, radius })
+                });
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while searching. Please try again.');
+            }
         });
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Search Results</h2>';
+            
+            data.results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <h3>${result.name}</h3>
+                    <p>${result.address}</p>
+                    <p>Distance: ${result.distance}</p>
+                `;
+                resultsDiv.appendChild(resultItem);
+            });
+        }
     </script>
 </body>
 </html>
