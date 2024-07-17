@@ -1,50 +1,137 @@
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchForm = document.getElementById('searchForm');
-        if (searchForm) {
-            searchForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const keyword = document.getElementById('keyword').value;
-                const location = document.getElementById('location').value;
-                const radius = document.getElementById('radius').value;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Search - Search Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        h1, h2 {
+            color: #bb86fc;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            color: #03dac6;
+        }
+        input, select {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+        }
+        button {
+            background-color: #03dac6;
+            color: #000000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #018786;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .result-item {
+            background-color: #2c2c2c;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Businesses</h1>
+        <form id="searchForm">
+            <label for="keyword">Keyword:</label>
+            <input type="text" id="keyword" name="keyword" required placeholder="e.g., dentist">
 
-                try {
-                    const response = await fetch('/.netlify/functions/search', {
-                        method: 'POST',
-                        body: JSON.stringify({ keyword, location, radius })
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+            <label for="location">Location (Address or Coordinates):</label>
+            <input type="text" id="location" name="location" required placeholder="e.g., 123 Main St, City, State">
+
+            <label for="radius">Search Radius (miles):</label>
+            <input type="number" id="radius" name="radius" required min="1" max="100" value="10">
+
+            <button type="submit">Search</button>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('searchForm');
+            if (searchForm) {
+                searchForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const keyword = document.getElementById('keyword').value;
+                    const location = document.getElementById('location').value;
+                    const radius = document.getElementById('radius').value;
+
+                    try {
+                        const response = await fetch('/.netlify/functions/search', {
+                            method: 'POST',
+                            body: JSON.stringify({ keyword, location, radius })
+                        });
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        const data = await response.json();
+                        displayResults(data);
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while searching. Please try again.');
                     }
-                    const data = await response.json();
-                    displayResults(data);
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred while searching. Please try again.');
-                }
-            });
-        } else {
-            console.error('Search form not found');
-        }
-    });
+                });
+            } else {
+                console.error('Search form not found');
+            }
+        });
 
-    function displayResults(data) {
-        const resultsDiv = document.getElementById('results');
-        if (resultsDiv) {
-            resultsDiv.innerHTML = '<h2>Search Results</h2>';
-            
-            data.results.forEach(result => {
-                const resultItem = document.createElement('div');
-                resultItem.className = 'result-item';
-                resultItem.innerHTML = `
-                    <h3>${result.name}</h3>
-                    <p>${result.address}</p>
-                    <p>Distance: ${result.distance}</p>
-                `;
-                resultsDiv.appendChild(resultItem);
-            });
-        } else {
-            console.error('Results div not found');
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv) {
+                resultsDiv.innerHTML = '<h2>Search Results</h2>';
+                
+                data.results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <h3>${result.name}</h3>
+                        <p>${result.address}</p>
+                        <p>Distance: ${result.distance}</p>
+                    `;
+                    resultsDiv.appendChild(resultItem);
+                });
+            } else {
+                console.error('Results div not found');
+            }
         }
-    }
-</script>
+    </script>
+</body>
+</html>
