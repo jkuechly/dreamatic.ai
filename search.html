@@ -1,39 +1,50 @@
 <script>
-    document.getElementById('searchForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const keyword = document.getElementById('keyword').value;
-        const location = document.getElementById('location').value;
-        const radius = document.getElementById('radius').value;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const keyword = document.getElementById('keyword').value;
+                const location = document.getElementById('location').value;
+                const radius = document.getElementById('radius').value;
 
-        try {
-            const response = await fetch('/.netlify/functions/search', {
-                method: 'POST',
-                body: JSON.stringify({ keyword, location, radius })
+                try {
+                    const response = await fetch('/.netlify/functions/search', {
+                        method: 'POST',
+                        body: JSON.stringify({ keyword, location, radius })
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    displayResults(data);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while searching. Please try again.');
+                }
             });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            displayResults(data);
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while searching. Please try again.');
+        } else {
+            console.error('Search form not found');
         }
     });
 
     function displayResults(data) {
         const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '<h2>Search Results</h2>';
-        
-        data.results.forEach(result => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'result-item';
-            resultItem.innerHTML = `
-                <h3>${result.name}</h3>
-                <p>${result.address}</p>
-                <p>Distance: ${result.distance}</p>
-            `;
-            resultsDiv.appendChild(resultItem);
-        });
+        if (resultsDiv) {
+            resultsDiv.innerHTML = '<h2>Search Results</h2>';
+            
+            data.results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <h3>${result.name}</h3>
+                    <p>${result.address}</p>
+                    <p>Distance: ${result.distance}</p>
+                `;
+                resultsDiv.appendChild(resultItem);
+            });
+        } else {
+            console.error('Results div not found');
+        }
     }
 </script>
