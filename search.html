@@ -5,18 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Search - Search Page</title>
     <style>
-        /* ... (keep the existing styles) ... */
-        #downloadButton {
-            margin-top: 20px;
-            background-color: #bb86fc;
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
         }
-        #downloadButton:hover {
-            background-color: #985eff;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 5px;
         }
-        #loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
+        h1 {
+            color: #bb86fc;
+        }
+        #searchForm {
+            display: flex;
+            flex-direction: column;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 8px;
+        }
+        button {
+            background-color: #03dac6;
+            color: #000000;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -24,92 +43,24 @@
     <div class="container">
         <h1>Search Businesses</h1>
         <form id="searchForm">
-            <!-- ... (keep the existing form fields) ... -->
+            <input type="text" id="keyword" name="keyword" required placeholder="Keyword (e.g., dentist)">
+            <input type="text" id="location" name="location" required placeholder="Location">
+            <input type="number" id="radius" name="radius" required min="1" max="100" value="10" placeholder="Radius (miles)">
             <button type="submit">Search</button>
         </form>
-        <div id="loading">Searching...</div>
         <div id="results"></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchForm = document.getElementById('searchForm');
-            const loadingDiv = document.getElementById('loading');
-            
             if (searchForm) {
-                searchForm.addEventListener('submit', async function(e) {
+                searchForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    const keyword = document.getElementById('keyword').value;
-                    const location = document.getElementById('location').value;
-                    const radius = document.getElementById('radius').value;
-
-                    loadingDiv.style.display = 'block';
-                    
-                    try {
-                        const response = await fetch('/.netlify/functions/search', {
-                            method: 'POST',
-                            body: JSON.stringify({ keyword, location, radius })
-                        });
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        const data = await response.json();
-                        displayResults(data);
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while searching. Please try again.');
-                    } finally {
-                        loadingDiv.style.display = 'none';
-                    }
+                    alert('Search function will be implemented soon!');
                 });
-            } else {
-                console.error('Search form not found');
             }
         });
-
-        function displayResults(data) {
-            const resultsDiv = document.getElementById('results');
-            if (resultsDiv) {
-                resultsDiv.innerHTML = '<h2>Search Results</h2>';
-                
-                data.results.forEach(result => {
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'result-item';
-                    resultItem.innerHTML = `
-                        <h3>${result.name}</h3>
-                        <p>${result.address}</p>
-                        <p>Distance: ${result.distance}</p>
-                    `;
-                    resultsDiv.appendChild(resultItem);
-                });
-
-                // Add download button
-                const downloadButton = document.createElement('button');
-                downloadButton.id = 'downloadButton';
-                downloadButton.textContent = 'Download Results';
-                downloadButton.onclick = () => downloadResults(data.results);
-                resultsDiv.appendChild(downloadButton);
-            } else {
-                console.error('Results div not found');
-            }
-        }
-
-        function downloadResults(results) {
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Name,Address,Distance\n";
-            
-            results.forEach(result => {
-                csvContent += `"${result.name}","${result.address}","${result.distance}"\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "search_results.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
     </script>
 </body>
 </html>
