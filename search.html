@@ -86,10 +86,15 @@
                     loadingDiv.style.display = 'block';
                     
                     try {
-                        const response = await fetch('/.netlify/functions/search', {
-                            method: 'POST',
-                            body: JSON.stringify({ keyword, location, radius })
-                        });
+                        // Start both the fetch and the delay simultaneously
+                        const [response] = await Promise.all([
+                            fetch('/.netlify/functions/search', {
+                                method: 'POST',
+                                body: JSON.stringify({ keyword, location, radius })
+                            }),
+                            new Promise(resolve => setTimeout(resolve, 2000)) // 2-second delay
+                        ]);
+
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
