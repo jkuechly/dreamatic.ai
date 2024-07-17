@@ -84,111 +84,111 @@
     <div id="downloadNotification">Download successful!</div>
     
     <script>
-        let searchResults = [];
+    let searchResults = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchForm = document.getElementById('searchForm');
-            const loadingDiv = document.getElementById('loading');
-            
-            if (searchForm) {
-                searchForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const keyword = document.getElementById('keyword').value;
-                    const location = document.getElementById('location').value;
-                    const radius = document.getElementById('radius').value;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('searchForm');
+        const loadingDiv = document.getElementById('loading');
+        
+        if (searchForm) {
+            searchForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const keyword = document.getElementById('keyword').value;
+                const location = document.getElementById('location').value;
+                const radius = document.getElementById('radius').value;
 
-                    loadingDiv.style.display = 'block';
-                    
-                    try {
-                        const [response] = await Promise.all([
-                            fetch('/.netlify/functions/search', {
-                                method: 'POST',
-                                body: JSON.stringify({ keyword, location, radius })
-                            }),
-                            new Promise(resolve => setTimeout(resolve, 2000))
-                        ]);
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        const data = await response.json();
-                        searchResults = data.results;
-                        displayResults(data);
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while searching. Please try again.');
-                    } finally {
-                        loadingDiv.style.display = 'none';
-                    }
-                });
-            } else {
-                console.error('Search form not found');
-            }
-        });
-
-        function displayResults(data) {
-            const resultsDiv = document.getElementById('results');
-            if (resultsDiv) {
-                resultsDiv.innerHTML = '<h2>Search Results</h2>';
+                loadingDiv.style.display = 'block';
                 
-                data.results.forEach(result => {
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'result-item';
-                    resultItem.innerHTML = `
-                        <h3>${result.name}</h3>
-                        <p>${result.address}</p>
-                        <p>Distance: ${result.distance}</p>
-                    `;
-                    resultsDiv.appendChild(resultItem);
-                });
+                try {
+                    const [response] = await Promise.all([
+                        fetch('/.netlify/functions/search', {
+                            method: 'POST',
+                            body: JSON.stringify({ keyword, location, radius })
+                        }),
+                        new Promise(resolve => setTimeout(resolve, 2000))
+                    ]);
 
-                const downloadButton = document.createElement('button');
-                downloadButton.id = 'downloadButton';
-                downloadButton.textContent = 'Download Results';
-                downloadButton.onclick = downloadResults;
-                resultsDiv.appendChild(downloadButton);
-            } else {
-                console.error('Results div not found');
-            }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    searchResults = data.results;
+                    displayResults(data);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while searching. Please try again.');
+                } finally {
+                    loadingDiv.style.display = 'none';
+                }
+            });
+        } else {
+            console.error('Search form not found');
         }
+    });
 
-        function downloadResults() {
-            if (searchResults.length === 0) {
-                alert('No results to download. Please perform a search first.');
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Name,Address,Distance\n";
+    function displayResults(data) {
+        const resultsDiv = document.getElementById('results');
+        if (resultsDiv) {
+            resultsDiv.innerHTML = '<h2>Search Results</h2>';
             
-            searchResults.forEach(result => {
-                csvContent += `"${result.name}","${result.address}","${result.distance}"\n`;
+            data.results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <h3>${result.name}</h3>
+                    <p>${result.address}</p>
+                    <p>Distance: ${result.distance}</p>
+                `;
+                resultsDiv.appendChild(resultItem);
             });
 
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "search_results.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const downloadButton = document.createElement('button');
+            downloadButton.id = 'downloadButton';
+            downloadButton.textContent = 'Download Results';
+            downloadButton.onclick = downloadResults;
+            resultsDiv.appendChild(downloadButton);
+        } else {
+            console.error('Results div not found');
+        }
+    }
 
-            // Show download notification
-            showDownloadNotification();
+    function downloadResults() {
+        if (searchResults.length === 0) {
+            alert('No results to download. Please perform a search first.');
+            return;
         }
 
-        function showDownloadNotification() {
-            const notification = document.getElementById('downloadNotification');
-            notification.style.display = 'block';
-            notification.style.opacity = '1';
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Name,Address,Distance\n";
+        
+        searchResults.forEach(result => {
+            csvContent += `"${result.name}","${result.address}","${result.distance}"\n`;
+        });
 
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "search_results.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Show download notification
+        showDownloadNotification();
+    }
+
+    function showDownloadNotification() {
+        const notification = document.getElementById('downloadNotification');
+        notification.style.display = 'block';
+        notification.style.opacity = '1';
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
             setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 500);
-            }, 3000);
-        }
-    </script>
+                notification.style.display = 'none';
+            }, 500);
+        }, 3000);
+    }
+</script>
 </body>
 </html>
