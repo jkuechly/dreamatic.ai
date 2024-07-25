@@ -153,6 +153,36 @@
         margin: 0 10px;
         line-height: 38px;
     }
+     html {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    /* Adjust stacking context and force hardware acceleration for specific containers */
+    #searchContainer,
+    #resultsContainer,
+    #leftPanel,
+    #rightPanel,
+    #map {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+
+    /* Use alternative positioning for the map container */
+    #rightPanel {
+        position: relative;
+        overflow: hidden;
+    }
+
+    #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 </style>
 
 </head>
