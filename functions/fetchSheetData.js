@@ -37,7 +37,11 @@ exports.handler = async function(event, context) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ results })
+      body: JSON.stringify({
+        results: results,
+        totalResults: results.length,
+        message: 'Data fetched successfully'
+      })
     };
   } catch (error) {
     console.error('Detailed error:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
