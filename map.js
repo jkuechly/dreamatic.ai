@@ -1,12 +1,11 @@
 let map;
-let markers = [];
+let markers = []
 
 function initMap() {
-  // Initialize the map centered on a default location (e.g., United States)
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 37.0902, lng: -95.7129 },
-    zoom: 4,
-  });
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 37.0902, lng: -95.7129 },
+        zoom: 4,
+    });
 }
 
 function addMarkersToMap(results) {
