@@ -8,10 +8,14 @@ exports.handler = async function(event, context) {
     const doc = new GoogleSpreadsheet('1m_-JEgVDYE8iBgF8CrCcIOet9uk3qldHRytbDYtyAwY');
     console.log('Google Sheet initialized');
 
-    // Initialize Auth - use service account or OAuth2 client
+    // Prepare the private key
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+    console.log('Private key prepared');
+
+    // Initialize Auth - use service account
     await doc.useServiceAccountAuth({
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      private_key: privateKey,
     });
     console.log('Auth completed');
 
