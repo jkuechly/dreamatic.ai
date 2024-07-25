@@ -4,28 +4,25 @@ exports.handler = async function(event, context) {
   try {
     console.log('Function started');
     
-    // Initialize the sheet - doc ID is the long id in the sheets URL
     const doc = new GoogleSpreadsheet('1m_-JEgVDYE8iBgF8CrCcIOet9uk3qldHRytbDYtyAwY');
     console.log('Google Sheet initialized');
 
-    // Prepare the private key
     const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
     console.log('Private key prepared');
 
-    // Initialize Auth - use service account
     await doc.useServiceAccountAuth({
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
       private_key: privateKey,
     });
     console.log('Auth completed');
 
-    await doc.loadInfo(); // loads document properties and worksheets
+    await doc.loadInfo();
     console.log('Document loaded');
     
-    const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+    const sheet = doc.sheetsByIndex[0];
     console.log('Sheet accessed');
 
-    const rows = await sheet.getRows(); // can pass in { limit, offset }
+    const rows = await sheet.getRows();
     console.log(`${rows.length} rows fetched`);
 
     const results = rows.map(row => ({
@@ -43,7 +40,7 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ results })
     };
   } catch (error) {
-    console.error('Error details:', error);
+    console.error('Detailed error:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed to fetch data', details: error.message })
