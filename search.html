@@ -128,7 +128,7 @@
     
     <div id="downloadNotification">Download successful!</div>
     
-    <script>
+   <script>
     let searchResults = [];
     let currentPage = 1;
     const resultsPerPage = 5;
@@ -159,8 +159,16 @@
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
-                    searchResults = data.results;
-                    displayResults(data);
+                    console.log('Received data:', data);  // Log the received data
+                    if (data.results && Array.isArray(data.results)) {
+                        searchResults = data.results;
+                        displayResults({
+                            results: data.results,
+                            searchParams: { keyword, location, radius }
+                        });
+                    } else {
+                        throw new Error('Invalid data structure received');
+                    }
                 } catch (error) {
                     console.error('Error:', error);
                     alert('An error occurred while searching. Please try again.');
