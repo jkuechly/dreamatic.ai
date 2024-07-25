@@ -148,7 +148,7 @@
                 
                 try {
                     const [response] = await Promise.all([
-                        fetch('/.netlify/functions/search', {
+                        fetch('/.netlify/functions/fetchSheetData', {
                             method: 'POST',
                             body: JSON.stringify({ keyword, location, radius })
                         }),
@@ -213,8 +213,9 @@
                 <div class="result-info">
                     <h3>${result.name}</h3>
                     <p>${result.address}</p>
+                    <p>Phone: ${result.phone}</p>
+                    <p>Website: <a href="${result.website}" target="_blank">${result.website}</a></p>
                 </div>
-                <span class="result-distance">${result.distance}</span>
             `;
             resultsDiv.appendChild(resultItem);
         });
@@ -247,10 +248,10 @@
         }
 
         let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Name,Address,Distance\n";
+        csvContent += "Name,Address,Phone,Website,Latitude,Longitude\n";
         
         searchResults.forEach(result => {
-            csvContent += `"${result.name}","${result.address}","${result.distance}"\n`;
+            csvContent += `"${result.name}","${result.address}","${result.phone}","${result.website}","${result.latitude}","${result.longitude}"\n`;
         });
 
         const encodedUri = encodeURI(csvContent);
