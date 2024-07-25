@@ -1,0 +1,8 @@
+{
+  "name": "business-search-mvp",
+  "version": "1.0.0",
+  "description": "Business Search MVP",
+  "dependencies": {
+    "google-spreadsheet": "^3.3.0"
+  }
+}
