@@ -198,6 +198,9 @@
             // Display results with pagination
             displayResultsPage(currentPage);
 
+            // Add Location to map
+            addMarkersToMap(data.results);
+
             // Add download button
             const downloadButton = document.createElement('button');
             downloadButton.id = 'downloadButton';
