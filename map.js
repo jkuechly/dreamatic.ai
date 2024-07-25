@@ -46,5 +46,5 @@ function clearMarkers() {
     markers.forEach((marker) => marker.setMap(null));
     markers = [];
 }
-
+window.map = map;
 google.maps.event.addDomListener(window, "load", initMap);
