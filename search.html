@@ -4,213 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Search - Search Page</title>
- <style>
-    body, html {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        background-color: #121212;
-        color: #e0e0e0;
-    }
-    #searchContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        max-width: 800px;
-        margin: 0 auto;
-        background-color: #1e1e1e;
-        padding: 50px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    #resultsContainer {
-        display: none;
-        height: 100vh;
-    }
-    #leftPanel {
-        width: 33%;
-        overflow-y: auto;
-        padding: 20px;
-        box-sizing: border-box;
-        background-color: #1e1e1e;
-    }
-    #rightPanel {
-        width: 67%;
-    }
-    #map {
-        height: 100%;
-        width: 100%;
-        transform: translateZ(0);
-        will-change: transform;
-    }
-    h1, h2 {
-        color: #bb86fc;
-        text-align: center;
-        font-size: 3em;
-        margin-bottom: 30px;
-    }
-    #searchForm {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-    input, button {
-        margin: 15px 0;
-        padding: 15px;
-        background-color: #2c2c2c;
-        color: #e0e0e0;
-        border: 2px solid #333;
-        border-radius: 8px;
-        font-size: 1.2em;
-    }
-    button {
-        background-color: #03dac6;
-        color: #000000;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1.4em;
-        padding: 15px 30px;
-    }
-    button:hover {
-        background-color: #018786;
-    }
-    #loading {
-        display: none;
-        text-align: center;
-        margin-top: 20px;
-    }
-    .result-item {
-        background-color: #2c2c2c;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .result-info {
-        flex-grow: 1;
-    }
-    .result-distance {
-        background-color: #03dac6;
-        color: #000000;
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-weight: bold;
-    }
-    #downloadButton {
-        margin-top: 20px;
-        background-color: #bb86fc;
-        color: #000000;
-    }
-    #downloadButton:hover {
-        background-color: #985eff;
-    }
-    #downloadNotification {
-        display: none;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #4CAF50;
-        color: white;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-    }
-    #searchSummary {
-        background-color: #2c2c2c;
-        padding: 10px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        text-align: center;
-    }
-    #pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-    #pagination button {
-        margin: 0 5px;
-    }
-    #pagination button, #downloadButton, #searchForm button {
-        background-color: #03dac6;
-        color: #000000;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1em;
-        border-radius: 4px;
-    }
-    #pagination button:hover, #downloadButton:hover, #searchForm button:hover {
-        background-color: #018786;
-    }
-    #currentPage {
-        margin: 0 10px;
-        line-height: 38px;
-    }
-     html {
-        transform: translateZ(0);
-        backface-visibility: hidden;
-        perspective: 1000px;
-    }
-
-    /* Adjust stacking context and force hardware acceleration for specific containers */
-    #searchContainer,
-    #resultsContainer,
-    #leftPanel,
-    #rightPanel,
-    #map {
-        transform: translateZ(0);
-        backface-visibility: hidden;
-        will-change: transform;
-    }
-
-    /* Use alternative positioning for the map container */
-    #rightPanel {
-        position: relative;
-        overflow: hidden;
-    }
-
-    #map {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    #filterMenu {
-    background-color: #2c2c2c;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    }
-    
-    #filterMenu h3, #filterMenu h4 {
-        color: #bb86fc;
-        margin-top: 0;
-    }
-    
-    #filterMenu input {
-        width: 100%;
-        margin: 5px 0;
-        padding: 8px;
-        font-size: 1em;
-    }
-    
-    #filterMenu button {
-        width: 100%;
-        margin-top: 10px;
-    }
-</style>
-
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        #searchContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        #resultsContainer {
+            display: none;
+            height: 100vh;
+        }
+        #leftPanel {
+            width: 33%;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #1e1e1e;
+        }
+        #rightPanel {
+            width: 67%;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        h1, h2 {
+            color: #bb86fc;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+        #searchForm {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        input, button {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+        button {
+            background-color: #03dac6;
+            color: #000000;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.4em;
+            padding: 15px 30px;
+        }
+        button:hover {
+            background-color: #018786;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .result-item {
+            background-color: #2c2c2c;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-info {
+            flex-grow: 1;
+        }
+        .result-distance {
+            background-color: #03dac6;
+            color: #000000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        #downloadButton {
+            margin-top: 20px;
+            background-color: #bb86fc;
+            color: #000000;
+        }
+        #downloadButton:hover {
+            background-color: #985eff;
+        }
+        #downloadNotification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #searchSummary {
+            background-color: #2c2c2c;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #pagination button {
+            margin: 0 5px;
+        }
+        #pagination button, #downloadButton, #searchForm button {
+            background-color: #03dac6;
+            color: #000000;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            border-radius: 4px;
+        }
+        #pagination button:hover, #downloadButton:hover, #searchForm button:hover {
+            background-color: #018786;
+        }
+        #currentPage {
+            margin: 0 10px;
+            line-height: 38px;
+        }
+        html {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        #searchContainer,
+        #resultsContainer,
+        #leftPanel,
+        #rightPanel,
+        #map {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform;
+        }
+        #rightPanel {
+            position: relative;
+            overflow: hidden;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        #filterMenu {
+            background-color: #2c2c2c;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        #filterMenu h3, #filterMenu h4 {
+            color: #bb86fc;
+            margin-top: 0;
+        }
+        #filterMenu input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+            font-size: 1em;
+        }
+        #filterMenu button {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div id="searchContainer">
@@ -223,32 +213,32 @@
         </form>
     </div>
     <div id="resultsContainer">
-    <div id="leftPanel">
-        <div id="filterMenu">
-            <h3>Filters</h3>
-            <div id="radiusFilter">
-                <h4>Radius Filter</h4>
-                <input type="number" id="anchorLat" placeholder="Anchor Latitude" step="0.000001">
-                <input type="number" id="anchorLng" placeholder="Anchor Longitude" step="0.000001">
-                <input type="number" id="filterRadius" placeholder="Radius (miles)" min="1" step="0.01">
-                <button id="applyRadiusFilter">Apply Filter</button>
+        <div id="leftPanel">
+            <div id="searchSummary"></div>
+            <div id="filterMenu">
+                <h3>Filters</h3>
+                <div id="radiusFilter">
+                    <h4>Radius Filter</h4>
+                    <input type="number" id="anchorLat" placeholder="Anchor Latitude" step="0.000001">
+                    <input type="number" id="anchorLng" placeholder="Anchor Longitude" step="0.000001">
+                    <input type="number" id="filterRadius" placeholder="Radius (miles)" min="1" step="0.01">
+                    <button id="applyRadiusFilter">Apply Filter</button>
+                </div>
             </div>
+            <div id="results"></div>
         </div>
-        <div id="results"></div>
-    </div>
-    <div id="rightPanel">
-        <div id="map"></div>
-    </div>
+        <div id="rightPanel">
+            <div id="map"></div>
+        </div>
     </div>
     <div id="loading">Searching...</div>
     <div id="downloadNotification">Download successful!</div>
-    <div id="searchSummary"></div>
-    <div id="results"></div>
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqaLW8xNgBwSWatNnTR2c7U5as1TCqv8&libraries=places"></script>
     <script src="map.js"></script>
     <script>
     let searchResults = [];
+    let filteredResults = [];
     let currentPage = 1;
     const resultsPerPage = 5;
 
@@ -278,9 +268,8 @@
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
-                    console.log('Received data:', data);  // Log the received data
+                    console.log('Received data:', data);
                     if (data.results && Array.isArray(data.results)) {
-                        searchResults = data.results;
                         displayResults({
                             results: data.results,
                             searchParams: { keyword, location, radius }
@@ -303,52 +292,59 @@
     function switchToResultsView() {
         document.getElementById('searchContainer').style.display = 'none';
         document.getElementById('resultsContainer').style.display = 'flex';
-        initMap(); // Initialize the map
     }
 
-   function displayResultsPage(page) {
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = ''; // Clear previous results
-    
-    const startIndex = (page - 1) * resultsPerPage;
-    const endIndex = Math.min(startIndex + resultsPerPage, filteredResults.length);
-    const pageResults = filteredResults.slice(startIndex, endIndex);
+    function displayResults(data) {
+        searchResults = data.results;
+        filteredResults = searchResults;
+        switchToResultsView();
+        displayResultsPage(1);
+        updateSearchSummary();
+        initializeFilters();
+        addMarkersToMap(filteredResults);
+    }
 
-    pageResults.forEach(result => {
-        const resultItem = document.createElement('div');
-        resultItem.className = 'result-item';
-        resultItem.innerHTML = `
-            <div class="result-info">
-                <h3>${result.name}</h3>
-                <p>${result.address}</p>
-                <p>Phone: ${result.phone}</p>
-                <p>Website: <a href="${result.website}" target="_blank">${result.website}</a></p>
-                <p>Latitude: ${result.latitude}</p>
-                <p>Longitude: ${result.longitude}</p>
-            </div>
+    function displayResultsPage(page) {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+        
+        const startIndex = (page - 1) * resultsPerPage;
+        const endIndex = Math.min(startIndex + resultsPerPage, filteredResults.length);
+        const pageResults = filteredResults.slice(startIndex, endIndex);
+
+        pageResults.forEach(result => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `
+                <div class="result-info">
+                    <h3>${result.name}</h3>
+                    <p>${result.address}</p>
+                    <p>Phone: ${result.phone}</p>
+                    <p>Website: <a href="${result.website}" target="_blank">${result.website}</a></p>
+                    <p>Latitude: ${result.latitude}</p>
+                    <p>Longitude: ${result.longitude}</p>
+                </div>
+            `;
+            resultsDiv.appendChild(resultItem);
+        });
+
+        const paginationDiv = document.createElement('div');
+        paginationDiv.id = 'pagination';
+        paginationDiv.innerHTML = `
+            <button onclick="changePage(-1)" ${page === 1 ? 'disabled' : ''}>Previous</button>
+            <span id="currentPage">Page ${page} of ${Math.ceil(filteredResults.length / resultsPerPage)}</span>
+            <button onclick="changePage(1)" ${endIndex >= filteredResults.length ? 'disabled' : ''}>Next</button>
         `;
-        resultsDiv.appendChild(resultItem);
-    });
+        resultsDiv.appendChild(paginationDiv);
 
-    // Add pagination controls
-    const paginationDiv = document.createElement('div');
-    paginationDiv.id = 'pagination';
-    paginationDiv.innerHTML = `
-        <button onclick="changePage(-1)" ${page === 1 ? 'disabled' : ''}>Previous</button>
-        <span id="currentPage">Page ${page} of ${Math.ceil(filteredResults.length / resultsPerPage)}</span>
-        <button onclick="changePage(1)" ${endIndex >= filteredResults.length ? 'disabled' : ''}>Next</button>
-    `;
-    resultsDiv.appendChild(paginationDiv);
+        const downloadButton = document.createElement('button');
+        downloadButton.id = 'downloadButton';
+        downloadButton.textContent = 'Download Results';
+        downloadButton.onclick = downloadResults;
+        resultsDiv.appendChild(downloadButton);
 
-    // Add download button
-    const downloadButton = document.createElement('button');
-    downloadButton.id = 'downloadButton';
-    downloadButton.textContent = 'Download Results';
-    downloadButton.onclick = downloadResults;
-    resultsDiv.appendChild(downloadButton);
-
-    currentPage = page;
-    updateSearchSummary();
+        currentPage = page;
+        updateSearchSummary();
     }
 
     function changePage(delta) {
@@ -407,41 +403,37 @@
             }, 500);
         }, 3000);
     }
-        
-    let originalResults = [];
-    let filteredResults = [];
-    let radiusCircle;
     
     function initializeFilters() {
         document.getElementById('applyRadiusFilter').addEventListener('click', applyRadiusFilter);
     }
     
     function applyRadiusFilter() {
-    const anchorLat = parseFloat(document.getElementById('anchorLat').value);
-    const anchorLng = parseFloat(document.getElementById('anchorLng').value);
-    const filterRadius = parseFloat(document.getElementById('filterRadius').value);
-    const maxRadius = parseFloat(document.getElementById('radius').value);
+        const anchorLat = parseFloat(document.getElementById('anchorLat').value);
+        const anchorLng = parseFloat(document.getElementById('anchorLng').value);
+        const filterRadius = parseFloat(document.getElementById('filterRadius').value);
+        const maxRadius = parseFloat(document.getElementById('radius').value);
 
-    if (isNaN(anchorLat) || isNaN(anchorLng) || isNaN(filterRadius)) {
-        alert('Please enter valid numbers for latitude, longitude, and radius.');
-        return;
+        if (isNaN(anchorLat) || isNaN(anchorLng) || isNaN(filterRadius)) {
+            alert('Please enter valid numbers for latitude, longitude, and radius.');
+            return;
+        }
+
+        if (filterRadius < 1 || filterRadius > maxRadius) {
+            alert(`Radius must be between 1 and ${maxRadius} miles.`);
+            return;
+        }
+
+        filteredResults = searchResults.filter(result => {
+            const distance = haversineDistance(anchorLat, anchorLng, parseFloat(result.latitude), parseFloat(result.longitude));
+            return distance <= filterRadius;
+        });
+
+        updateMapWithFilteredResults(filteredResults, anchorLat, anchorLng, filterRadius);
+        displayResultsPage(1);
     }
-
-    if (filterRadius < 1 || filterRadius > maxRadius) {
-        alert(`Radius must be between 1 and ${maxRadius} miles.`);
-        return;
-    }
-
-    filteredResults = searchResults.filter(result => {
-        const distance = haversineDistance(anchorLat, anchorLng, parseFloat(result.latitude), parseFloat(result.longitude));
-        return distance <= filterRadius;
-    });
-
-    updateMapWithFilteredResults(filteredResults, anchorLat, anchorLng, filterRadius);
-    displayResultsPage(1);
-}
     
-    function haversineDistance(lat1, lon1, lat2, lon2) {
+   function haversineDistance(lat1, lon1, lat2, lon2) {
         const R = 3959; // Earth's radius in miles
         const dLat = toRadians(lat2 - lat1);
         const dLon = toRadians(lon2 - lon1);
@@ -457,14 +449,10 @@
         return degrees * (Math.PI/180);
     }
     
-    function updateMapWithFilteredResults() {
+    function updateMapWithFilteredResults(filteredResults, anchorLat, anchorLng, filterRadius) {
         clearMarkers();
         addMarkersToMap(filteredResults);
         
-        const anchorLat = parseFloat(document.getElementById('anchorLat').value);
-        const anchorLng = parseFloat(document.getElementById('anchorLng').value);
-        const filterRadius = parseFloat(document.getElementById('filterRadius').value);
-    
         if (radiusCircle) {
             radiusCircle.setMap(null);
         }
@@ -482,17 +470,6 @@
     
         map.fitBounds(radiusCircle.getBounds());
     }
-    
-  function displayResults(data) {
-    searchResults = data.results;
-    filteredResults = searchResults;
-    displayResultsPage(1);
-    updateSearchSummary();
-    initializeFilters();
-    }
-  function initializeFilters() {
-    document.getElementById('applyRadiusFilter').addEventListener('click', applyRadiusFilter);
-  }
     </script>
 </body>
 </html>
