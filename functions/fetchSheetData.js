@@ -27,7 +27,7 @@ exports.handler = async function(event, context) {
 
     const results = rows.map(row => ({
       name: row.name,
-      address: row['full address'],
+      address: row.address,
       phone: row.phone,
       website: row.website,
       latitude: row.latitude,
