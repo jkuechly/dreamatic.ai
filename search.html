@@ -5,143 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Search - Search Page</title>
  <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
-        }
-       #searchContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            max-width: 800px; /* Increased from 600px */
-            margin: 0 auto;
-            background-color: #1e1e1e;
-            padding: 50px; /* Increased from 30px */
-            border-radius: 10px; /* Increased from 5px */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        #resultsContainer {
-            display: none;
-            height: 100vh;
-        }
-        #leftPanel {
-            width: 33%;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: #1e1e1e;
-        }
-        #rightPanel {
-            width: 67%;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        h1, h2 {
-            color: #bb86fc;
-            text-align: center;
-            font-size: 3em; /* Increased font size */
-            margin-bottom: 30px; /* Added margin for spacing */
-        }
-        #searchForm {
-            display: flex;
-            flex-direction: column;
-            width: 100%; /* Make form full width of container */
-        }
-        input, button {
-            margin: 15px 0; /* Increased from 10px */
-            padding: 15px; /* Increased from 8px */
-            background-color: #2c2c2c;
-            color: #e0e0e0;
-            border: 2px solid #333; /* Increased border width */
-            border-radius: 8px; /* Increased from 4px */
-            font-size: 1.2em; /* Increased font size */
-        }
-        button {
-            background-color: #03dac6;
-            color: #000000;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.4em; /* Increased font size */
-            padding: 15px 30px; /* Increased padding */
-        }
-        button:hover {
-            background-color: #018786;
-        }
-        #loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .result-item {
-            background-color: #2c2c2c;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .result-info {
-            flex-grow: 1;
-        }
-        .result-distance {
-            background-color: #03dac6;
-            color: #000000;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-        }
-        #downloadButton {
-            margin-top: 20px;
-            background-color: #bb86fc;
-            color: #000000;
-        }
-        #downloadButton:hover {
-            background-color: #985eff;
-        }
-        #downloadNotification {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #searchSummary {
-            background-color: #2c2c2c;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        #pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        #pagination button {
-            margin: 0 5px;
-        }
-        #currentPage {
-            margin: 0 10px;
-            line-height: 38px;
-        }
-    </style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    #searchContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #1e1e1e;
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #resultsContainer {
+        display: none;
+        height: 100vh;
+    }
+    #leftPanel {
+        width: 33%;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #1e1e1e;
+    }
+    #rightPanel {
+        width: 67%;
+    }
+    #map {
+        height: 100%;
+        width: 100%;
+    }
+    h1, h2 {
+        color: #bb86fc;
+        text-align: center;
+        font-size: 3em;
+        margin-bottom: 30px;
+    }
+    #searchForm {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    input, button {
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #2c2c2c;
+        color: #e0e0e0;
+        border: 2px solid #333;
+        border-radius: 8px;
+        font-size: 1.2em;
+    }
+    button {
+        background-color: #03dac6;
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.4em;
+        padding: 15px 30px;
+    }
+    button:hover {
+        background-color: #018786;
+    }
+    #loading {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .result-item {
+        background-color: #2c2c2c;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .result-info {
+        flex-grow: 1;
+    }
+    .result-distance {
+        background-color: #03dac6;
+        color: #000000;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+    }
+    #downloadButton {
+        margin-top: 20px;
+        background-color: #bb86fc;
+        color: #000000;
+    }
+    #downloadButton:hover {
+        background-color: #985eff;
+    }
+    #downloadNotification {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    #searchSummary {
+        background-color: #2c2c2c;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+    #pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    #pagination button {
+        margin: 0 5px;
+    }
+    #pagination button, #downloadButton, #searchForm button {
+        background-color: #03dac6;
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1em;
+        border-radius: 4px;
+    }
+    #pagination button:hover, #downloadButton:hover, #searchForm button:hover {
+        background-color: #018786;
+    }
+    #currentPage {
+        margin: 0 10px;
+        line-height: 38px;
+    }
+</style>
+
 </head>
 <body>
     <div id="searchContainer">
