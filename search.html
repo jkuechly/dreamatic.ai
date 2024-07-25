@@ -298,41 +298,6 @@
         }
     });
 
-    function displayResults(data) {
-        const resultsDiv = document.getElementById('results');
-        if (resultsDiv) {
-            // Clear previous results
-            resultsDiv.innerHTML = '';
-
-            // Display search summary
-            const searchSummary = document.createElement('div');
-            searchSummary.id = 'searchSummary';
-            searchSummary.innerHTML = `
-                <p>Showing results for "${data.searchParams.keyword}" 
-                within ${data.searchParams.radius} miles of ${data.searchParams.location}</p>
-            `;
-            resultsDiv.appendChild(searchSummary);
-
-            // Display results with pagination
-            displayResultsPage(currentPage);
-
-            // Add download button
-            const downloadButton = document.createElement('button');
-            downloadButton.id = 'downloadButton';
-            downloadButton.textContent = 'Download Results';
-            downloadButton.onclick = downloadResults;
-            resultsDiv.appendChild(downloadButton);
-
-            // Switch to results view
-            switchToResultsView();
-
-            // Add markers to the map
-            addMarkersToMap(data.results);
-        } else {
-            console.error('Results div not found');
-        }
-    }
-
     function switchToResultsView() {
         document.getElementById('searchContainer').style.display = 'none';
         document.getElementById('resultsContainer').style.display = 'flex';
@@ -418,6 +383,119 @@
                 notification.style.display = 'none';
             }, 500);
         }, 3000);
+    }
+        
+    let originalResults = [];
+    let filteredResults = [];
+    let radiusCircle;
+    
+    function initializeFilters() {
+        document.getElementById('applyRadiusFilter').addEventListener('click', applyRadiusFilter);
+    }
+    
+    function applyRadiusFilter() {
+        const anchorLat = parseFloat(document.getElementById('anchorLat').value);
+        const anchorLng = parseFloat(document.getElementById('anchorLng').value);
+        const filterRadius = parseFloat(document.getElementById('filterRadius').value);
+        const maxRadius = parseFloat(document.getElementById('radius').value);
+    
+        if (isNaN(anchorLat) || isNaN(anchorLng) || isNaN(filterRadius)) {
+            alert('Please enter valid numbers for latitude, longitude, and radius.');
+            return;
+        }
+    
+        if (filterRadius < 1 || filterRadius > maxRadius) {
+            alert(`Radius must be between 1 and ${maxRadius} miles.`);
+            return;
+        }
+    
+        filteredResults = originalResults.filter(result => {
+            const distance = haversineDistance(anchorLat, anchorLng, parseFloat(result.latitude), parseFloat(result.longitude));
+            return distance <= filterRadius;
+        });
+    
+        updateMapWithFilteredResults();
+        displayResultsPage(1);
+    }
+    
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+        const R = 3959; // Earth's radius in miles
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+    
+    function toRadians(degrees) {
+        return degrees * (Math.PI/180);
+    }
+    
+    function updateMapWithFilteredResults() {
+        clearMarkers();
+        addMarkersToMap(filteredResults);
+        
+        const anchorLat = parseFloat(document.getElementById('anchorLat').value);
+        const anchorLng = parseFloat(document.getElementById('anchorLng').value);
+        const filterRadius = parseFloat(document.getElementById('filterRadius').value);
+    
+        if (radiusCircle) {
+            radiusCircle.setMap(null);
+        }
+    
+        radiusCircle = new google.maps.Circle({
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#0000FF',
+            fillOpacity: 0.1,
+            map: map,
+            center: {lat: anchorLat, lng: anchorLng},
+            radius: filterRadius * 1609.34 // Convert miles to meters
+        });
+    
+        map.fitBounds(radiusCircle.getBounds());
+    }
+    
+     function displayResults(data) {
+        originalResults = data.results;
+        filteredResults = originalResults;
+        const resultsDiv = document.getElementById('results');
+        if (resultsDiv) {
+            // Clear previous results
+            resultsDiv.innerHTML = '';
+
+            // Display search summary
+            const searchSummary = document.createElement('div');
+            searchSummary.id = 'searchSummary';
+            searchSummary.innerHTML = `
+                <p>Showing results for "${data.searchParams.keyword}" 
+                within ${data.searchParams.radius} miles of ${data.searchParams.location}</p>
+            `;
+            resultsDiv.appendChild(searchSummary);
+
+            // Display results with pagination
+            displayResultsPage(currentPage);
+
+            // Add download button
+            const downloadButton = document.createElement('button');
+            downloadButton.id = 'downloadButton';
+            downloadButton.textContent = 'Download Results';
+            downloadButton.onclick = downloadResults;
+            resultsDiv.appendChild(downloadButton);
+
+            // Switch to results view
+            switchToResultsView();
+
+            // Add markers to the map
+            addMarkersToMap(data.results);
+            initializeFilters();
+        } else {
+            console.error('Results div not found');
+        }
     }
     </script>
 </body>
