@@ -5,21 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Search - Search Page</title>
     <style>
-        body {
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 20px;
             background-color: #121212;
             color: #e0e0e0;
         }
-        .container {
+        #searchContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             max-width: 600px;
             margin: 0 auto;
             background-color: #1e1e1e;
             padding: 30px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        #resultsContainer {
+            display: none;
+            height: 100vh;
+        }
+        #leftPanel {
+            width: 33%;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #1e1e1e;
+        }
+        #rightPanel {
+            width: 67%;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
         }
         h1, h2 {
             color: #bb86fc;
@@ -114,7 +138,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="searchContainer">
         <h1>Search Businesses</h1>
         <form id="searchForm">
             <input type="text" id="keyword" name="keyword" required placeholder="Keyword (e.g., dentist)">
@@ -122,14 +146,21 @@
             <input type="number" id="radius" name="radius" required min="1" max="100" value="10" placeholder="Radius (miles)">
             <button type="submit">Search</button>
         </form>
-        <div id="loading">Searching...</div>
-        <div id="results"></div>
-        <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
     </div>
-    
+    <div id="resultsContainer">
+        <div id="leftPanel">
+            <div id="results"></div>
+        </div>
+        <div id="rightPanel">
+            <div id="map"></div>
+        </div>
+    </div>
+    <div id="loading">Searching...</div>
     <div id="downloadNotification">Download successful!</div>
     
-   <script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqaLW8xNgBwSWatNnTR2c7U5as1TCqv8&libraries=places"></script>
+    <script src="map.js"></script>
+    <script>
     let searchResults = [];
     let currentPage = 1;
     const resultsPerPage = 5;
@@ -185,6 +216,9 @@
     function displayResults(data) {
         const resultsDiv = document.getElementById('results');
         if (resultsDiv) {
+            // Clear previous results
+            resultsDiv.innerHTML = '';
+
             // Display search summary
             const searchSummary = document.createElement('div');
             searchSummary.id = 'searchSummary';
@@ -192,14 +226,10 @@
                 <p>Showing results for "${data.searchParams.keyword}" 
                 within ${data.searchParams.radius} miles of ${data.searchParams.location}</p>
             `;
-            resultsDiv.innerHTML = '';
             resultsDiv.appendChild(searchSummary);
 
             // Display results with pagination
             displayResultsPage(currentPage);
-
-            // Add Location to map
-            addMarkersToMap(data.results);
 
             // Add download button
             const downloadButton = document.createElement('button');
@@ -207,9 +237,21 @@
             downloadButton.textContent = 'Download Results';
             downloadButton.onclick = downloadResults;
             resultsDiv.appendChild(downloadButton);
+
+            // Switch to results view
+            switchToResultsView();
+
+            // Add markers to the map
+            addMarkersToMap(data.results);
         } else {
             console.error('Results div not found');
         }
+    }
+
+    function switchToResultsView() {
+        document.getElementById('searchContainer').style.display = 'none';
+        document.getElementById('resultsContainer').style.display = 'flex';
+        initMap(); // Initialize the map
     }
 
     function displayResultsPage(page) {
@@ -293,9 +335,5 @@
         }, 3000);
     }
     </script>
-    
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuqaLW8xNgBwSWatNnTR2c7U5as1TCqv8&libraries=places"></script>
-    <script src="map.js"></script>
-    
 </body>
 </html>
