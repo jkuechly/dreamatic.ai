@@ -2,14 +2,14 @@ import { switchToResultsView } from './switchToResultsView.js';
 import { displayResultsPage } from './displayResultsPage.js';
 import { updateSearchSummary } from './updateSearchSummary.js';
 import { initializeFilters } from './initializeFilters.js';
-import { addMarkersToMap } from './addMarkersToMap.js';
+import { addMarkersToMap } from './maps.js';
 
 export function displayResults(data) {
-    searchResults = data.results;
-    filteredResults = searchResults;
+    const { results, searchParams } = data;
+    const filteredResults = results;
     switchToResultsView();
-    displayResultsPage(1);
-    updateSearchSummary();
+    displayResultsPage(filteredResults, 1);
+    updateSearchSummary(searchParams, results.length);
     initializeFilters();
     addMarkersToMap(filteredResults);
 }
