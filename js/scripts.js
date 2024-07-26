@@ -1,4 +1,4 @@
-import { initMap, addMarkersToMap, clearMarkers } from './maps.js';
+import { initMap } from './maps.js';
 import { fetchSheetData } from './fetchSheetData.js';
 import { displayResults } from './displayResults.js';
 
