@@ -1,4 +1,4 @@
-import { initMap } from './maps.js';
+import { initMap, addMarkersToMap, updateMapWithFilteredResults } from './maps.js';
 import { fetchSheetData } from './fetchSheetData.js';
 import { displayResults } from './displayResults.js';
 
@@ -19,10 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await fetchSheetData(keyword, location, radius);
                 console.log('Received data:', data);
                 if (data.results && Array.isArray(data.results)) {
+                    const [lat, lng] = location.split(',').map(coord => parseFloat(coord.trim()));
                     displayResults({
                         results: data.results,
                         searchParams: { keyword, location, radius }
                     });
+                    updateMapWithFilteredResults(data.results, lat, lng, parseFloat(radius));
                 } else {
                     throw new Error('Invalid data structure received');
                 }
