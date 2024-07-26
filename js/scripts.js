@@ -6,6 +6,7 @@ import { displayResults } from './displayResults.js';
 
 let geocoder;
 let originalSearchParams;
+let allResults = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
                 console.log('Received data:', data);
                 if (data.results && Array.isArray(data.results)) {
+                    allResults = data.results;  // Store all results
                     displayResults({
                         results: data.results,
                         searchParams: { keyword, location, radius }
@@ -82,4 +84,8 @@ function geocodeLocation(address) {
             }
         });
     });
+}
+
+export function getAllResults() {
+    return allResults;
 }
