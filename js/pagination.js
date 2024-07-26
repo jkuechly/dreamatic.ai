@@ -5,7 +5,12 @@ export function setupPagination(filteredResults, displayFunction) {
     const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
     
     function updatePaginationControls() {
-        const paginationDiv = document.getElementById('pagination');
+        let paginationDiv = document.getElementById('pagination');
+        if (!paginationDiv) {
+            paginationDiv = document.createElement('div');
+            paginationDiv.id = 'pagination';
+            document.getElementById('results').appendChild(paginationDiv);
+        }
         paginationDiv.innerHTML = `
             <button onclick="window.changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
             <span id="currentPage">Page ${currentPage} of ${totalPages}</span>
@@ -26,4 +31,5 @@ export function setupPagination(filteredResults, displayFunction) {
     };
 
     updatePaginationControls();
+    window.changePage(0); // This will display the first page
 }
