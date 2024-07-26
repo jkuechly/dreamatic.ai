@@ -1,4 +1,5 @@
-import { haversineDistance } from './haversineDistance.js';
+// In /js/applyRadiusFilter.js
+
 import { updateMapWithFilteredResults } from './maps.js';
 import { displayResultsPage } from './displayResultsPage.js';
 import { updateSearchSummary } from './updateSearchSummary.js';
@@ -7,15 +8,14 @@ export function applyRadiusFilter(allResults) {
     const anchorLat = parseFloat(document.getElementById('anchorLat').value);
     const anchorLng = parseFloat(document.getElementById('anchorLng').value);
     const filterRadius = parseFloat(document.getElementById('filterRadius').value);
-    const initialRadius = parseFloat(document.getElementById('radius').value);
 
     if (isNaN(anchorLat) || isNaN(anchorLng) || isNaN(filterRadius)) {
         alert('Please enter valid numbers for latitude, longitude, and radius.');
         return;
     }
 
-    if (filterRadius < 1 || filterRadius > initialRadius) {
-        alert(`Radius must be between 1 and ${initialRadius} miles.`);
+    if (filterRadius < 1) {
+        alert('Radius must be at least 1 mile.');
         return;
     }
 
