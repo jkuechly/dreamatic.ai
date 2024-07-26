@@ -1,13 +1,6 @@
+import { initMap, addMarkersToMap, clearMarkers } from './maps.js';
 import { fetchSheetData } from './fetchSheetData.js';
 import { displayResults } from './displayResults.js';
-import { downloadResults } from './downloadResults.js';
-import { updateSearchSummary } from './updateSearchSummary.js';
-import { initializeFilters } from './initializeFilters.js';
-import { applyRadiusFilter } from './applyRadiusFilter.js';
-import { haversineDistance } from './haversineDistance.js';
-import { updateMapWithFilteredResults } from './updateMapWithFilteredResults.js';
-import { showDownloadNotification } from './showDownloadNotification.js';
-import { initMap, addMarkersToMap, clearMarkers } from './maps.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
@@ -43,4 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Search form not found');
     }
+
+    // Initialize map when the page loads
+    window.addEventListener('load', initMap);
 });
