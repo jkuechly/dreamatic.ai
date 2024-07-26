@@ -7,6 +7,7 @@ import { applyRadiusFilter } from './applyRadiusFilter.js';
 import { haversineDistance } from './haversineDistance.js';
 import { updateMapWithFilteredResults } from './updateMapWithFilteredResults.js';
 import { showDownloadNotification } from './showDownloadNotification.js';
+import { addMarkersToMap, clearMarkers } from './maps.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
