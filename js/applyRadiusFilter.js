@@ -1,5 +1,5 @@
 import { haversineDistance } from './haversineDistance.js';
-import { updateMapWithFilteredResults } from './updateMapWithFilteredResults.js';
+import { updateMapWithFilteredResults } from './maps.js';
 import { displayResultsPage } from './displayResultsPage.js';
 
 export function applyRadiusFilter(allResults) {
