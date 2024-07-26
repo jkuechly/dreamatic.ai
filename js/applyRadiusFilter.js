@@ -1,6 +1,7 @@
 import { haversineDistance } from './haversineDistance.js';
 import { updateMapWithFilteredResults } from './maps.js';
 import { displayResultsPage } from './displayResultsPage.js';
+import { updateSearchSummary } from './updateSearchSummary.js'; // Add this import
 
 export function applyRadiusFilter(allResults) {
     const anchorLat = parseFloat(document.getElementById('anchorLat').value);
@@ -25,4 +26,9 @@ export function applyRadiusFilter(allResults) {
 
     updateMapWithFilteredResults(filteredResults, anchorLat, anchorLng, filterRadius);
     displayResultsPage(filteredResults, 1);
+    
+    // Update the search summary with the new filtered results count
+    const keyword = document.getElementById('keyword').value;
+    const location = `${anchorLat}, ${anchorLng}`; // Use the filter coordinates
+    updateSearchSummary({ keyword, location, radius: filterRadius }, filteredResults.length);
 }
