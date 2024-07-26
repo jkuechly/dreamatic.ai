@@ -1,10 +1,16 @@
+// In /js/scripts.js
 import { initMap, addMarkersToMap, updateMapWithFilteredResults } from './maps.js';
 import { fetchSheetData } from './fetchSheetData.js';
 import { displayResults } from './displayResults.js';
 
+let geocoder;
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
     const loadingDiv = document.getElementById('loading');
+
+    // Initialize geocoder
+    geocoder = new google.maps.Geocoder();
 
     if (searchForm) {
         searchForm.addEventListener('submit', async function(e) {
@@ -16,10 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingDiv.style.display = 'block';
 
             try {
-                const data = await fetchSheetData(keyword, location, radius);
+                // Geocode the location
+                const geocodeResult = await geocodeLocation(location);
+                const { lat, lng } = geocodeResult;
+
+                const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
                 console.log('Received data:', data);
                 if (data.results && Array.isArray(data.results)) {
-                    const [lat, lng] = location.split(',').map(coord => parseFloat(coord.trim()));
                     displayResults({
                         results: data.results,
                         searchParams: { keyword, location, radius }
@@ -42,3 +51,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize map when the page loads
     window.addEventListener('load', initMap);
 });
+
+function geocodeLocation(address) {
+    return new Promise((resolve, reject) => {
+        geocoder.geocode({ address: address }, (results, status) => {
+            if (status === 'OK') {
+                const { lat, lng } = results[0].geometry.location;
+                resolve({ lat: lat(), lng: lng() });
+            } else {
+                reject(new Error('Geocode was not successful for the following reason: ' + status));
+            }
+        });
+    });
+}
