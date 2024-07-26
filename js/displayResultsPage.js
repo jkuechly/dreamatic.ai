@@ -1,4 +1,7 @@
-export function displayResultsPage(page) {
+import { downloadResults } from './downloadResults.js';
+
+export function displayResultsPage(filteredResults, page) {
+    const resultsPerPage = 10; // You can adjust this value
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
@@ -34,9 +37,6 @@ export function displayResultsPage(page) {
     const downloadButton = document.createElement('button');
     downloadButton.id = 'downloadButton';
     downloadButton.textContent = 'Download Results';
-    downloadButton.onclick = downloadResults;
+    downloadButton.onclick = () => downloadResults(filteredResults);
     resultsDiv.appendChild(downloadButton);
-
-    currentPage = page;
-    updateSearchSummary();
 }
