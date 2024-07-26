@@ -6,10 +6,9 @@ import { addMarkersToMap } from './maps.js';
 
 export function displayResults(data) {
     const { results, searchParams } = data;
-    const filteredResults = results;
     switchToResultsView();
-    displayResultsPage(filteredResults, 1);
+    displayResultsPage(results, 1);
     updateSearchSummary(searchParams, results.length);
-    initializeFilters();
-    addMarkersToMap(filteredResults);
+    initializeFilters(results);
+    addMarkersToMap(results);
 }
