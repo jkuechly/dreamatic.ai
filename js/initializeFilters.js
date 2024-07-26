@@ -1,5 +1,8 @@
-import { applyRadiusFilter } from './applyRadiusFilter.js';
+// In /js/initializeFilters.js
 
-export function initializeFilters(allResults) {
-    document.getElementById('applyRadiusFilter').addEventListener('click', () => applyRadiusFilter(allResults));
+import { applyRadiusFilter } from './applyRadiusFilter.js';
+import { getAllResults } from './scripts.js';
+
+export function initializeFilters() {
+    document.getElementById('applyFilter').addEventListener('click', () => applyRadiusFilter(getAllResults()));
 }
