@@ -34,8 +34,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
             console.log('Received data:', data);
-            if (data.results && Array.isArray(data.results)) {
+           if (data.results && Array.isArray(data.results)) {
                 allResults = data.results;  // Store all results
+                
+                // Switch to results view
+                const searchContainer = document.getElementById('searchContainer');
+                const resultsContainer = document.getElementById('resultsContainer');
+                if (searchContainer && resultsContainer) {
+                    searchContainer.style.display = 'none';
+                    resultsContainer.style.display = 'flex';
+                } else {
+                    console.error("Search or results container not found");
+                }
+                
                 displayResults({
                     results: data.results,
                     searchParams: { keyword, location, radius }
@@ -56,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         console.error('Filter inputs not found');
                     }
-                }, 0);
+                }, 100);
             } else {
                 throw new Error('Invalid data structure received');
             }
