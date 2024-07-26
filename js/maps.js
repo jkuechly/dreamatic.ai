@@ -1,5 +1,6 @@
 let map;
 let markers = [];
+let currentCircle = null;
 
 export function initMap() {
     const mapElement = document.getElementById("map");
@@ -60,7 +61,13 @@ export function updateMapWithFilteredResults(filteredResults, anchorLat, anchorL
     clearMarkers();
     addMarkersToMap(filteredResults);
 
-    const radiusCircle = new google.maps.Circle({
+    // Remove the previous circle if it exists
+    if (currentCircle) {
+        currentCircle.setMap(null);
+    }
+
+    // Create and add the new circle
+    currentCircle = new google.maps.Circle({
         strokeColor: '#0000FF',
         strokeOpacity: 0.8,
         strokeWeight: 2,
@@ -71,5 +78,5 @@ export function updateMapWithFilteredResults(filteredResults, anchorLat, anchorL
         radius: filterRadius * 1609.34 // Convert miles to meters
     });
 
-    map.fitBounds(radiusCircle.getBounds());
+    map.fitBounds(currentCircle.getBounds());
 }
