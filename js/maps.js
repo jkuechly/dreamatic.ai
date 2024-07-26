@@ -20,7 +20,8 @@ export function addMarkersToMap(results) {
     }
     clearMarkers();
     results.forEach((result) => {
-        const markerView = new google.maps.marker.AdvancedMarkerView({
+        // TODO: Update to google.maps.marker.AdvancedMarkerElement when available
+        const marker = new google.maps.Marker({
             position: { lat: parseFloat(result.latitude), lng: parseFloat(result.longitude) },
             map: map,
             title: result.name,
@@ -37,21 +38,21 @@ export function addMarkersToMap(results) {
             `,
         });
         
-        markerView.addListener("click", () => {
-            infoWindow.open(map, markerView);
+        marker.addListener("click", () => {
+            infoWindow.open(map, marker);
         });
         
-        markers.push(markerView);
+        markers.push(marker);
     });
 
     if (markers.length > 0) {
         const bounds = new google.maps.LatLngBounds();
-        markers.forEach((marker) => bounds.extend(marker.position));
+        markers.forEach((marker) => bounds.extend(marker.getPosition()));
         map.fitBounds(bounds);
     }
 }
 
 export function clearMarkers() {
-    markers.forEach((marker) => marker.map = null);
+    markers.forEach((marker) => marker.setMap(null));
     markers = [];
 }
