@@ -2,7 +2,7 @@ import { haversineDistance } from './haversineDistance.js';
 import { updateMapWithFilteredResults } from './updateMapWithFilteredResults.js';
 import { displayResultsPage } from './displayResultsPage.js';
 
-export function applyRadiusFilter() {
+export function applyRadiusFilter(allResults) {
     const anchorLat = parseFloat(document.getElementById('anchorLat').value);
     const anchorLng = parseFloat(document.getElementById('anchorLng').value);
     const filterRadius = parseFloat(document.getElementById('filterRadius').value);
@@ -18,11 +18,11 @@ export function applyRadiusFilter() {
         return;
     }
 
-    filteredResults = searchResults.filter(result => {
+    const filteredResults = allResults.filter(result => {
         const distance = haversineDistance(anchorLat, anchorLng, parseFloat(result.latitude), parseFloat(result.longitude));
         return distance <= filterRadius;
     });
 
     updateMapWithFilteredResults(filteredResults, anchorLat, anchorLng, filterRadius);
-    displayResultsPage(1);
+    displayResultsPage(filteredResults, 1);
 }
