@@ -16,8 +16,6 @@ export function displayResultsPage(filteredResults, page) {
                     <p>${result.address}</p>
                     <p>Phone: ${result.phone}</p>
                     <p>Website: <a href="${result.website}" target="_blank">${result.website}</a></p>
-                    <p>Latitude: ${result.latitude}</p>
-                    <p>Longitude: ${result.longitude}</p>
                 </div>
             `;
             resultsDiv.appendChild(resultItem);
