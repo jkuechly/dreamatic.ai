@@ -1,5 +1,5 @@
 export async function fetchSheetData(keyword, location, radius) {
-    const response = await fetch('/.netlify/functions/fetchSheetData', {
+    const response = await fetch('/.netlify/functions/fetchGoogleSheetsData_serverless', { // Updated endpoint
         method: 'POST',
         body: JSON.stringify({ keyword, location, radius })
     });
