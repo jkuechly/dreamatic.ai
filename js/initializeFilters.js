@@ -8,7 +8,7 @@ export function initializeFilters() {
     const filterMenu = document.getElementById('filterMenu');
     console.log("Filter menu found:", !!filterMenu);
     
-    const applyFilterButton = document.getElementById('applyFilter');
+    const applyFilterButton = document.getElementById('applyRadiusFilter');
     console.log("Apply filter button found:", !!applyFilterButton);
     
     if (applyFilterButton) {
