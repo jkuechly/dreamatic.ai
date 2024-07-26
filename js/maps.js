@@ -2,13 +2,22 @@ let map;
 let markers = [];
 
 export function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 37.0902, lng: -95.7129 },
-        zoom: 4,
-    });
+    const mapElement = document.getElementById("map");
+    if (mapElement) {
+        map = new google.maps.Map(mapElement, {
+            center: { lat: 37.0902, lng: -95.7129 },
+            zoom: 4,
+        });
+    } else {
+        console.error("Map container not found");
+    }
 }
 
 export function addMarkersToMap(results) {
+    if (!map) {
+        console.error("Map not initialized");
+        return;
+    }
     clearMarkers();
     results.forEach((result) => {
         const marker = new google.maps.Marker({
@@ -46,5 +55,3 @@ export function clearMarkers() {
     markers.forEach((marker) => marker.setMap(null));
     markers = [];
 }
-
-window.initMap = initMap;
