@@ -1,5 +1,5 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { haversineDistance } = require('./haversineDistance'); // You'll need to create this file
+const { haversineDistance } = require('./haversineDistance_serverless');
 
 exports.handler = async function(event, context) {
   try {
