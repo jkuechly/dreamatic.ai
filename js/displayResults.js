@@ -1,3 +1,5 @@
+// In /js/displayResults.js
+
 import { switchToResultsView } from './switchToResultsView.js';
 import { displayResultsPage } from './displayResultsPage.js';
 import { updateSearchSummary } from './updateSearchSummary.js';
@@ -9,6 +11,10 @@ export function displayResults(data) {
     switchToResultsView();
     displayResultsPage(results, 1);
     updateSearchSummary(searchParams, results.length);
-    initializeFilters(results);
     addMarkersToMap(results);
+
+    // Use setTimeout to ensure the DOM has been updated before initializing filters
+    setTimeout(() => {
+        initializeFilters();
+    }, 0);
 }
