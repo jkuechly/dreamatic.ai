@@ -1,6 +1,7 @@
 let map;
 let markers = [];
 let currentCircle = null;
+let anchorMarker = null;
 
 export function initMap() {
     const mapElement = document.getElementById("map");
@@ -78,5 +79,27 @@ export function updateMapWithFilteredResults(filteredResults, anchorLat, anchorL
         radius: filterRadius * 1609.34 // Convert miles to meters
     });
 
+    // Add the anchor marker
+    updateAnchorMarker(anchorLat, anchorLng);
+
     map.fitBounds(currentCircle.getBounds());
+}
+
+export function updateAnchorMarker(lat, lng) {
+    if (anchorMarker) {
+        anchorMarker.setMap(null);
+    }
+    anchorMarker = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: '#FFD700',
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: '#000000'
+        },
+        title: 'Anchor Location'
+    });
 }
