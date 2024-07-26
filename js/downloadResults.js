@@ -1,4 +1,6 @@
-export function downloadResults() {
+import { showDownloadNotification } from './showDownloadNotification.js';
+
+export function downloadResults(filteredResults) {
     if (filteredResults.length === 0) {
         alert('No results to download. Please perform a search first.');
         return;
