@@ -3,7 +3,7 @@
 import { updateMapWithFilteredResults } from './maps.js';
 import { displayResultsPage } from './displayResultsPage.js';
 import { updateSearchSummary } from './updateSearchSummary.js';
-import { haversineDistance } from './haversineDistance.js';  // Add this line
+import { haversineDistance } from './haversineDistance.js';
 
 export function applyRadiusFilter(allResults) {
     const anchorLat = parseFloat(document.getElementById('anchorLat').value);
