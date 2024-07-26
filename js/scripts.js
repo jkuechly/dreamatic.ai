@@ -1,9 +1,11 @@
 // In /js/scripts.js
-import { initMap, addMarkersToMap, updateMapWithFilteredResults } from './maps.js';
+
+import { initMap, addMarkersToMap, updateMapWithFilteredResults, setOriginalSearchArea, toggleOriginalSearchArea } from './maps.js';
 import { fetchSheetData } from './fetchSheetData.js';
 import { displayResults } from './displayResults.js';
 
 let geocoder;
+let originalSearchParams;
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
@@ -26,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const geocodeResult = await geocodeLocation(location);
                 const { lat, lng } = geocodeResult;
 
+                // Save original search parameters
+                originalSearchParams = { keyword, location: `${lat},${lng}`, radius };
+
                 const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
                 console.log('Received data:', data);
                 if (data.results && Array.isArray(data.results)) {
@@ -33,7 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         results: data.results,
                         searchParams: { keyword, location, radius }
                     });
+                    setOriginalSearchArea(lat, lng, parseFloat(radius));
                     updateMapWithFilteredResults(data.results, lat, lng, parseFloat(radius));
+                    
+                    // Autofill the filter menu with the original search coordinates
+                    document.getElementById('anchorLat').value = lat;
+                    document.getElementById('anchorLng').value = lng;
+                    document.getElementById('filterRadius').value = radius;
                 } else {
                     throw new Error('Invalid data structure received');
                 }
@@ -46,6 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         console.error('Search form not found');
+    }
+
+    // Add this new event listener for the toggle checkbox
+    const toggleCheckbox = document.getElementById('toggleOriginalSearch');
+    if (toggleCheckbox) {
+        toggleCheckbox.addEventListener('change', function() {
+            toggleOriginalSearchArea(this.checked);
+        });
     }
 
     // Initialize map when the page loads
