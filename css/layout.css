@@ -1,0 +1,50 @@
+/* layout.css */
+#searchContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1e1e1e;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+#resultsContainer {
+    display: none;
+    height: 100vh;
+}
+#leftPanel {
+    width: 33%;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+}
+#rightPanel {
+    width: 67%;
+    position: relative;
+    overflow: hidden;
+}
+#map {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateZ(0);
+    will-change: transform;
+}
+#searchContainer,
+#resultsContainer,
+#leftPanel,
+#rightPanel,
+#map {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+}
