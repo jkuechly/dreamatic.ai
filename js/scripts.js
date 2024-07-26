@@ -16,47 +16,57 @@ document.addEventListener('DOMContentLoaded', function() {
     geocoder = new google.maps.Geocoder();
 
     if (searchForm) {
-        searchForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const keyword = document.getElementById('keyword').value;
-            const location = document.getElementById('location').value;
-            const radius = document.getElementById('radius').value;
+    searchForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const keyword = document.getElementById('keyword').value;
+        const location = document.getElementById('location').value;
+        const radius = document.getElementById('radius').value;
 
-            loadingDiv.style.display = 'block';
+        loadingDiv.style.display = 'block';
 
-            try {
-                // Geocode the location
-                const geocodeResult = await geocodeLocation(location);
-                const { lat, lng } = geocodeResult;
+        try {
+            // Geocode the location
+            const geocodeResult = await geocodeLocation(location);
+            const { lat, lng } = geocodeResult;
 
-                // Save original search parameters
-                originalSearchParams = { keyword, location: `${lat},${lng}`, radius };
+            // Save original search parameters
+            originalSearchParams = { keyword, location: `${lat},${lng}`, radius };
 
-                const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
-                console.log('Received data:', data);
-                if (data.results && Array.isArray(data.results)) {
-                    allResults = data.results;  // Store all results
-                    displayResults({
-                        results: data.results,
-                        searchParams: { keyword, location, radius }
-                    });
-                    setOriginalSearchArea(lat, lng, parseFloat(radius));
-                    updateMapWithFilteredResults(data.results, lat, lng, parseFloat(radius));
+            const data = await fetchSheetData(keyword, `${lat},${lng}`, radius);
+            console.log('Received data:', data);
+            if (data.results && Array.isArray(data.results)) {
+                allResults = data.results;  // Store all results
+                displayResults({
+                    results: data.results,
+                    searchParams: { keyword, location, radius }
+                });
+                setOriginalSearchArea(lat, lng, parseFloat(radius));
+                updateMapWithFilteredResults(data.results, lat, lng, parseFloat(radius));
+                
+                // Autofill the filter menu with the original search coordinates
+                setTimeout(() => {
+                    const anchorLatInput = document.getElementById('anchorLat');
+                    const anchorLngInput = document.getElementById('anchorLng');
+                    const filterRadiusInput = document.getElementById('filterRadius');
                     
-                    // Autofill the filter menu with the original search coordinates
-                    document.getElementById('anchorLat').value = lat;
-                    document.getElementById('anchorLng').value = lng;
-                    document.getElementById('filterRadius').value = radius;
-                } else {
-                    throw new Error('Invalid data structure received');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while searching. Please try again.');
-            } finally {
-                loadingDiv.style.display = 'none';
+                    if (anchorLatInput && anchorLngInput && filterRadiusInput) {
+                        anchorLatInput.value = lat;
+                        anchorLngInput.value = lng;
+                        filterRadiusInput.value = radius;
+                    } else {
+                        console.error('Filter inputs not found');
+                    }
+                }, 0);
+            } else {
+                throw new Error('Invalid data structure received');
             }
-        });
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while searching. Please try again.');
+        } finally {
+            loadingDiv.style.display = 'none';
+        }
+    });
     } else {
         console.error('Search form not found');
     }
