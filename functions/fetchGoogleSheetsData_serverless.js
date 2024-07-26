@@ -1,11 +1,14 @@
-//This is a serverless function
-
 const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { haversineDistance } = require('./haversineDistance'); // You'll need to create this file
 
 exports.handler = async function(event, context) {
   try {
     console.log('Function started');
     
+    const { keyword, location, radius } = JSON.parse(event.body);
+    const [anchorLat, anchorLng] = location.split(',').map(coord => parseFloat(coord.trim()));
+    const maxRadius = parseFloat(radius);
+
     const doc = new GoogleSpreadsheet('1m_-JEgVDYE8iBgF8CrCcIOet9uk3qldHRytbDYtyAwY');
     console.log('Google Sheet initialized');
 
@@ -27,22 +30,28 @@ exports.handler = async function(event, context) {
     const rows = await sheet.getRows();
     console.log(`${rows.length} rows fetched`);
 
-    const results = rows.map(row => ({
-      name: row.name,
-      address: row.address,
-      phone: row.phone,
-      website: row.website,
-      latitude: row.latitude,
-      longitude: row.longitude
-    }));
-    console.log('Results mapped');
+    const results = rows
+      .map(row => ({
+        name: row.name,
+        address: row.address,
+        phone: row.phone,
+        website: row.website,
+        latitude: parseFloat(row.latitude),
+        longitude: parseFloat(row.longitude)
+      }))
+      .filter(result => {
+        const distance = haversineDistance(anchorLat, anchorLng, result.latitude, result.longitude);
+        return distance <= maxRadius;
+      });
+
+    console.log(`${results.length} results after filtering`);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         results: results,
         totalResults: results.length,
-        message: 'Data fetched successfully'
+        message: 'Data fetched and filtered successfully'
       })
     };
   } catch (error) {
