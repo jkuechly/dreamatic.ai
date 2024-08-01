@@ -37,7 +37,8 @@ exports.handler = async function(event, context) {
         phone: row.phone,
         website: row.website,
         latitude: parseFloat(row.latitude),
-        longitude: parseFloat(row.longitude)
+        longitude: parseFloat(row.longitude),
+        distance: row.distance
       }))
       .filter(result => {
         const distance = haversineDistance(anchorLat, anchorLng, result.latitude, result.longitude);
