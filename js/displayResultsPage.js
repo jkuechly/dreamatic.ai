@@ -6,6 +6,9 @@ export function displayResultsPage(filteredResults, page) {
     resultsDiv.innerHTML = '';
 
     function displayPageResults(pageResults, currentPage, totalPages) {
+        // Sort the pageResults array by distance
+        pageResults.sort((a, b) => a.distance - b.distance);
+    
         resultsDiv.innerHTML = '';
         pageResults.forEach(result => {
             const resultItem = document.createElement('div');
@@ -21,18 +24,15 @@ export function displayResultsPage(filteredResults, page) {
             `;
             resultsDiv.appendChild(resultItem);
         });
-
         const paginationDiv = document.createElement('div');
         paginationDiv.id = 'pagination';
         resultsDiv.appendChild(paginationDiv);
-
         const downloadButton = document.createElement('button');
         downloadButton.id = 'downloadButton';
         downloadButton.textContent = 'Download Results';
         downloadButton.onclick = () => downloadResults(filteredResults);
         resultsDiv.appendChild(downloadButton);
     }
-
     setupPagination(filteredResults, displayPageResults);
     window.changePage(0); // This will display the first page
 }
