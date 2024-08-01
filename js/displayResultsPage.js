@@ -15,6 +15,7 @@ export function displayResultsPage(filteredResults, page) {
                     <h3>${result.name}</h3>
                     <p>${result.address}</p>
                     <p>Phone: ${result.phone}</p>
+                    <p>Distance: ${result.distance} miles</p>
                     <p>Website: <a href="${result.website}" target="_blank">${result.website}</a></p>
                 </div>
             `;
